@@ -1,0 +1,54 @@
+# Základní nastavení hry
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 600
+FPS = 60
+TITLE = "Super Mario - OOP Edition"
+
+# Barvy
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 100, 255)
+YELLOW = (255, 255, 0)
+SKY_BLUE = (135, 206, 235)
+BROWN = (139, 69, 19)
+DARK_GREEN = (34, 139, 34)
+ORANGE = (255, 140, 0)
+
+# Hráč
+PLAYER_WIDTH = 40
+PLAYER_HEIGHT = 50
+PLAYER_SPEED = 5
+PLAYER_JUMP_POWER = 15
+GRAVITY = 0.8
+MAX_LIVES = 3
+
+# Power stavy
+POWER_SMALL = 0
+POWER_SUPER = 1
+POWER_FIRE = 2
+
+# Velikosti Maria
+SMALL_MARIO_HEIGHT = 40
+SUPER_MARIO_HEIGHT = 50
+
+# Timer
+LEVEL_TIME = 300  # 300 sekund (5 minut)
+
+# Nepřítel
+ENEMY_WIDTH = 40
+ENEMY_HEIGHT = 40
+ENEMY_SPEED = 2
+
+# Platforma
+PLATFORM_COLOR = BROWN
+GROUND_HEIGHT = 50
+
+# Mince
+COIN_SIZE = 25
+COIN_POINTS = 10
+
+# Vlajka (cíl)
+FLAG_WIDTH = 20
+FLAG_HEIGHT = 100
