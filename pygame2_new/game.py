@@ -95,8 +95,8 @@ class Game:
         # Získání stisknutých kláves
         keys = pygame.key.get_pressed()
         
-        # Pohyb hráče
-        self.player.update(keys, self.level.platforms)
+        # Pohyb hráče s bloky a pipesami
+        self.player.update(keys, self.level.platforms, self.level.blocks, self.level.pipes)
         
         # Update bloků
         for block in self.level.blocks:

@@ -24,7 +24,7 @@ class Player:
         self.can_shoot = True
         self.shoot_cooldown = 0
         
-    def update(self, keys, platforms):
+    def update(self, keys, platforms, blocks=None, pipes=None):
         # Speed boost
         if self.speed_boost_timer > 0:
             self.speed_boost_timer -= 1
@@ -74,21 +74,43 @@ class Player:
             
         # Aktualizace pozice
         self.rect.x += self.velocity_x
-        self.check_collision_x(platforms)
+        self.check_collision_x(platforms, blocks, pipes)
         
         self.rect.y += self.velocity_y
         self.on_ground = False
-        self.check_collision_y(platforms)
+        self.check_collision_y(platforms, blocks, pipes)
         
-    def check_collision_x(self, platforms):
+    def check_collision_x(self, platforms, blocks=None, pipes=None):
+        """Kontrola kolize na ose X s platformami, bloky a pipesama"""
+        # Kolize s platformami
         for platform in platforms:
             if self.rect.colliderect(platform.rect):
                 if self.velocity_x > 0:  # Pohyb doprava
                     self.rect.right = platform.rect.left
                 elif self.velocity_x < 0:  # Pohyb doleva
                     self.rect.left = platform.rect.right
+        
+        # Kolize s bloky (nelze jimi procházet ze strany)
+        if blocks:
+            for block in blocks:
+                if not block.broken and self.rect.colliderect(block.rect):
+                    if self.velocity_x > 0:  # Pohyb doprava
+                        self.rect.right = block.rect.left
+                    elif self.velocity_x < 0:  # Pohyb doleva
+                        self.rect.left = block.rect.right
+        
+        # Kolize s pipesami (pevné objekty)
+        if pipes:
+            for pipe in pipes:
+                if self.rect.colliderect(pipe.rect):
+                    if self.velocity_x > 0:  # Pohyb doprava
+                        self.rect.right = pipe.rect.left
+                    elif self.velocity_x < 0:  # Pohyb doleva
+                        self.rect.left = pipe.rect.right
                     
-    def check_collision_y(self, platforms):
+    def check_collision_y(self, platforms, blocks=None, pipes=None):
+        """Kontrola kolize na ose Y s platformami, bloky a pipesami"""
+        # Kolize s platformami
         for platform in platforms:
             if self.rect.colliderect(platform.rect):
                 if self.velocity_y > 0:  # Padání dolů
@@ -98,6 +120,28 @@ class Player:
                 elif self.velocity_y < 0:  # Skok nahoru
                     self.rect.top = platform.rect.bottom
                     self.velocity_y = 0
+        
+        # Kolize s bloky
+        if blocks:
+            for block in blocks:
+                if not block.broken and self.rect.colliderect(block.rect):
+                    if self.velocity_y > 0:  # Padání dolů na blok
+                        self.rect.bottom = block.rect.top
+                        self.velocity_y = 0
+                        self.on_ground = True
+                    # Kolize zdola se řeší v game.py (hit_block)
+        
+        # Kolize s pipesami (lze stát na pipesech)
+        if pipes:
+            for pipe in pipes:
+                if self.rect.colliderect(pipe.rect):
+                    if self.velocity_y > 0:  # Padání dolů na pipesу
+                        self.rect.bottom = pipe.rect.top
+                        self.velocity_y = 0
+                        self.on_ground = True
+                    elif self.velocity_y < 0:  # Skok nahoru do pipesy
+                        self.rect.top = pipe.rect.bottom
+                        self.velocity_y = 0
                     
         # Kolize se zemí
         ground_y = SCREEN_HEIGHT - GROUND_HEIGHT
